@@ -24,7 +24,7 @@ jobs:
             artifact: wplauncher
 
           - name: linux-arm64
-            os: ubuntu-latest
+            os: ubuntu-24.04-arm
             artifact: wplauncher
 
           - name: macos-arm64
