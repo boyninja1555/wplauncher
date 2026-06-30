@@ -54,9 +54,9 @@ jobs:
         run: |
           mkdir release
           if [ "${{ runner.os }}" = "Windows" ]; then
-            mv dist/wplauncher.exe release/${{ matrix.name }}.exe
+            mv dist/wplauncher.exe release/wplauncher.exe
           else
-            mv dist/wplauncher release/${{ matrix.name }}
+            mv dist/wplauncher release/wplauncher-${{ matrix.name }}
           fi
 
       - name: Upload to GitHub Release
