@@ -75,12 +75,14 @@ def parse_manifest(jar: str) -> LauncherManifest:
     return LauncherManifest.from_dict(manifest)
 
 
-def unbunle_versionpack(pack: str, version_directory: str):
+def unbunle_versionpack(pack: str, version_directory: str, game_directory: str = "."):
     if not zipfile.is_zipfile(pack):
         print(
             f"{os.path.basename(pack)} is not a valid version pack! It cannot be unbundled."
         )
         sys.exit(1)
+
+    assets_directory = os.path.join(game_directory, "assets")
 
     import shutil
 
@@ -91,6 +93,9 @@ def unbunle_versionpack(pack: str, version_directory: str):
         zip.extractall(version_directory)
 
     os.remove(pack)
+
+    if os.path.isdir(assets_directory):
+        shutil.rmtree(assets_directory)
 
 
 def main():
@@ -105,7 +110,7 @@ def main():
     jar = os.path.join(version_directory, "worldplate-1.jar")
 
     if os.path.isfile(version_pack):
-        unbunle_versionpack(version_pack, version_directory)
+        unbunle_versionpack(version_pack, version_directory, game_directory)
 
     if not os.path.isfile(jar):
         print("Please ensure you have installed Worldplate correctly!")
