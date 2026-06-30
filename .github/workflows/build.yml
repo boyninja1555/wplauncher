@@ -27,10 +27,6 @@ jobs:
             os: ubuntu-latest
             artifact: wplauncher
 
-          - name: macos-x64
-            os: macos-13
-            artifact: wplauncher
-
           - name: macos-arm64
             os: macos-latest
             artifact: wplauncher
