@@ -1,0 +1,16 @@
+.wpversion
+.worldplate
+
+### PyInstaller ###
+build/
+dist/
+*.spec
+
+### Python ###
+__pycache__/
+.venv/
+
+### IDEs ###
+.idea/
+.vscode/
+.DS_Store

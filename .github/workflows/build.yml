@@ -1,0 +1,72 @@
+name: Build
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build-launcher:
+    name: Build ${{ matrix.name }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        include:
+          - name: windows-x64
+            os: windows-latest
+            artifact: wplauncher.exe
+
+          - name: linux-x64
+            os: ubuntu-latest
+            artifact: wplauncher
+
+          - name: linux-arm64
+            os: ubuntu-latest
+            artifact: wplauncher
+
+          - name: macos-x64
+            os: macos-13
+            artifact: wplauncher
+
+          - name: macos-arm64
+            os: macos-latest
+            artifact: wplauncher
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.x"
+
+      - name: Install PyInstaller
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyinstaller
+
+      - name: Build launcher
+        run: |
+          pyinstaller --onefile wplauncher.py
+
+      - name: Rename binary
+        shell: bash
+        run: |
+          mkdir release
+          if [ "${{ runner.os }}" = "Windows" ]; then
+            mv dist/wplauncher.exe release/${{ matrix.name }}.exe
+          else
+            mv dist/wplauncher release/${{ matrix.name }}
+          fi
+
+      - name: Upload to GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release upload \
+            "${{ github.event.release.tag_name }}" \
+            release/*
