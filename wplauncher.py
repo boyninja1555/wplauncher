@@ -84,7 +84,8 @@ def unbunle_versionpack(pack: str, version_directory: str):
 
     import shutil
 
-    shutil.rmtree(version_directory)
+    if os.path.isdir(version_directory):
+        shutil.rmtree(version_directory)
 
     with zipfile.ZipFile(pack, "r") as zip:
         zip.extractall(version_directory)
